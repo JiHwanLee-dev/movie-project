@@ -224,7 +224,6 @@
       dense
       dark
       elevate-on-scroll
-    
     >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 

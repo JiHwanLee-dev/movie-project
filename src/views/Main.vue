@@ -34,7 +34,9 @@
 
 <script>
 export default {
-
+  created(){
+    console.log('main_craeted()')
+  }
 }
 </script>
 
