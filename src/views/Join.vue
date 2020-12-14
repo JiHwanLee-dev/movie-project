@@ -46,6 +46,7 @@
                 <v-text-field
                     prepend-icon="mdi-account"
                     label="아이디"
+                    v-model="user.id"
                 >
 
                 </v-text-field>
@@ -71,7 +72,7 @@
 
     
                 <v-text-field
-                    v-model="password"
+                    v-model="user.passwd"
                     label="비밀번호"
                     name="password"
                     prepend-icon="mdi-lock"
@@ -89,7 +90,7 @@
                 />
 
                 <v-text-field
-                    v-model="name"
+                    v-model="user.name"
                     label="이름"
                     name="name"
                     prepend-icon="mdi-account"
@@ -107,7 +108,7 @@
                 >
                     <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                        v-model="date"
+                        v-model="user.birth"
                         label="생년월일"
                         prepend-icon="mdi-calendar"
                         readonly
@@ -117,12 +118,21 @@
                     </template>
                     <v-date-picker
                     ref="picker"
-                    v-model="date"
+                    v-model="user.birth"
                     :max="new Date().toISOString().substr(0, 10)"
                     min="1950-01-01"
                     @change="save"
                     ></v-date-picker>
                 </v-menu>
+
+                 <v-text-field
+                    v-model="user.phone"
+                    label="휴대폰"
+                    name="phone"
+                    prepend-icon="mdi-phone"
+                    type="text"
+                    :rules="nameRules"
+                />
 
                 </v-col>
 
@@ -132,7 +142,7 @@
                 > 
 
                     <v-text-field
-                        v-model="email"
+                        v-model="user.email"
                         label="이메일"
                         name="email"
                         prepend-icon="mdi-email"
@@ -149,9 +159,18 @@
                     <v-btn
                         rounded
                         @click="btnEmailAuth"
+                        :loading="loading"
                     >
                         인증
                     </v-btn>
+
+                    <!-- <v-btn
+                        :loading="loading"
+                        rounded
+                        @click="btnEmailAuth"
+                    >
+                        인증22
+                    </v-btn> -->
                 </v-col> 
             </v-row>
 
@@ -208,11 +227,23 @@
                 sm="8"
             >
                 <v-btn
+                    @click="btnJoin"
                     class="primary"
                     block
+                    :disabled="JoinBtnDisabled"
                 >
                     가입하기
                 </v-btn>
+
+                <v-btn
+                    @click="btnCheck"
+                    class="primary"
+                    block
+                    :disabled="JoinBtnDisabled"
+                >
+                    유저확인
+                </v-btn>
+
             </v-col>
         </v-row>
 
@@ -230,12 +261,24 @@ import axios from 'axios'
 export default {
     data() {
         return {
+            user: {
+                id: '',
+                email : '',
+                name: '',
+                phone: '',
+                passwd : '',
+                birth : '',
+                platform_type : 'nomal',
+            },
+
             tab: null,
             id: 'id',
             passwd: '',
             passwdChk: '',
             name: '',
             email: '',
+            phone: '',
+            birth: null,
 
 
             password: '',
@@ -247,7 +290,7 @@ export default {
             ],
             confirmPasswordRules: [
                 (value) => !!value || '비밀번호 확인',
-                (value) => value === this.password || '비밀번호가 일치하지 않습니다. ',
+                (value) => value === this.user.passwd || '비밀번호가 일치하지 않습니다. ',
             ],
             nameRules: [
                 (value) => !!value || '이름을 입력하세요. '
@@ -256,13 +299,17 @@ export default {
                 (value) => !!value || '이메일을 입력하세요. '
             ],
 
-            date: null,
+       
             menu: false,
             authNum: null,
             boolAuth: false,                  // 인증번호를 받앗는지 안받앗는지 체크
             test11 : '',
             authTime: '',
             boolAuthTimer: false,             // 인증버튼 클릭 시, 타이머의 동작 유무
+
+
+            loading: false,
+            JoinBtnDisabled : false,           // 가입버튼 막아놓음
         }
     },
 
@@ -283,40 +330,6 @@ export default {
 
     methods: {
 
-        btnTest(){
-
-            var setTime = 63;  // 초단위
-
-            // 화살표 함수를 써야 vue 인스턴스에 바인딩 할 수 있음.
-            var refreshIntervalId = setInterval(() => {
-                var m = Math.floor(setTime / 60) + "분 " + (setTime % 60) + "초";
-                
-                
-                if(setTime < 60){
-                    m = (setTime % 60) + "초";
-                }
-
-                this.test11 = m;
-                 console.log('시간 : ', m)
-                 console.log(this.test11);
-
-                 setTime --;
-
-                if(setTime < 0){
-                    clearInterval(refreshIntervalId)
-                }
-            }, 1000)
-
-            console.log('time : ', this.test11)
-
-
-            //this.test11 = minute
-
-
-        },
-
-
-
        btnBack(){
            this.$router.push({
                name: "Login"
@@ -336,63 +349,77 @@ export default {
             this.$refs.menu.save(date)
         },
 
+
+        // 인증버튼 클릭
         btnEmailAuth() {
-            console.log(this.email)   
+            this.loading = true;                     // loading중
+            console.log(this.email)
+            
+            if(this.email == ''){
+                alert('이메일을 작성해주세요 .')
+            }else{
+                  //  /*
 
-            axios({
-                url: `http://localhost:4000/emailAuth`,
-                method: "post",
-                data: {},
-                headers: {
-                    'content-type': 'application/json',
-                }
-            }).then(res => {
-                console.log('join_res : ', res);
-
-                // 인증 시간 부여 (3분)
-                
-           
-                //this.authNum = res.data.authNum;
-                this.boolAuth = true;
-
-                
-                var setTime = 180;  // (3분) 초 단위
-                this.boolAuthTimer = true;  // 타이머 동작 유무
-
-                // 화살표 함수를 써야 vue 인스턴스에 바인딩 할 수 있음.
-                var refreshIntervalId = setInterval(() => {
-                    var m = Math.floor(setTime / 60) + "분 " + (setTime % 60) + "초";
-                    
-                    if(setTime < 60){
-                        m = (setTime % 60) + "초";
+                axios({
+                    url: `http://localhost:3000/emailAuth`,
+                    method: "post",
+                    data: {},
+                    headers: {
+                        'content-type': 'application/json',
                     }
-
-                    this.authTime = m;
-                    console.log('시간 : ', m)
-                    //console.log(this.authTime);
-
-                    setTime --;
-
-                    if(setTime < 0){
-                        clearInterval(refreshIntervalId);
+                }).then(res => {
+                    console.log('join_res : ', res);
+                    this.loading = false;                           // loading 상태    
+                    // 인증 시간 부여 (3분)
                     
-                    // 인증 완료 시 , 인증 타이머를 멈춤.
-                    }else if(!this.boolAuthTimer){
-                        clearInterval(refreshIntervalId);
-                    }
+            
+                    //this.authNum = res.data.authNum;
+                    this.boolAuth = true;
 
-                }, 1000)
+                    
+                    var setTime = 180;  // (3분) 초 단위
+                    this.boolAuthTimer = true;  // 타이머 동작 유무
+
+                    // 화살표 함수를 써야 vue 인스턴스에 바인딩 할 수 있음.
+                    var refreshIntervalId = setInterval(() => {
+                        var m = Math.floor(setTime / 60) + "분 " + (setTime % 60) + "초";
+                        
+                        if(setTime < 60){
+                            m = (setTime % 60) + "초";
+                        }
+                        
+                        this.authTime = m;
+                        console.log('시간 : ', m)
+                        //console.log(this.authTime);
+
+                        setTime --;
+
+                        if(setTime < 0){
+                            clearInterval(refreshIntervalId);
+                        
+                        // 인증 완료 시 , 인증 타이머를 멈춤.
+                        }else if(!this.boolAuthTimer){
+                            clearInterval(refreshIntervalId);
+                        }
+
+                    }, 1000)
 
 
 
 
-            }).catch(err => {
-                console.log('err : ', err);
-            })
+                }).catch(err => {
+                    console.log('err : ', err);
+                })
+
+               // */
+            }
+
+            
         },
 
         // 인증 확인 버튼 클릭
         btnEmailAuthCheck(){
+
 
             console.log('boolAuth : ', this.boolAuth)
 
@@ -407,7 +434,7 @@ export default {
                 console.log('authNum : ', this.authNum);
 
                 axios({
-                    url: `http://localhost:4000/emailAuthConFirm`,
+                    url: `http://localhost:3000/emailAuthConFirm`,
                     method: "post",
                     data: {
                         authNum: this.authNum
@@ -438,6 +465,50 @@ export default {
             }else{
                 alert('이메일 인증을 하십시요. ')
             }
+        },
+
+        // 가입하기 버튼 
+        btnJoin() {
+            //this.joinBtnDisabled = false;
+            
+            console.log('this.user : ', this.user);
+
+            const jsonData = JSON.stringify(this.user);
+            //var jsonData = "aaaa";
+            
+            axios({
+                url: "http://localhost:3000/joinProcess",
+                method: "post",
+                data: jsonData,
+                headers: {
+                    'content-type': 'application/json',            
+                }
+            
+            }).then(res => {
+                console.log('loginResult : ', res);
+            })
+
+        },
+
+        // 유저 확인  
+        btnCheck () {
+             console.log('this.user : ', this.user);
+
+              const jsonData = JSON.stringify(this.user);
+            //var jsonData = "aaaa";
+            
+            axios({
+                url: "http://localhost:3000/userCheck",
+                method: "post",
+                data: jsonData,
+                headers: {
+                    'content-type': 'application/json',            
+                }
+            
+            }).then(res => {
+                console.log('loginResult : ', res);
+            })
+
         }
 
 

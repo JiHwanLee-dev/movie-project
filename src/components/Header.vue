@@ -176,25 +176,64 @@
 
         
           <v-list-item-content
-           
+            style="alitn-items: center;"
           >
                
-                  <v-row
-                    align="center"
-                    justify="center"
-                  > <!-- 중앙정렬 ? --> 
+               <v-row
+                align="center"
+                justify="center"
+               >
 
-                    <v-list-item-icon
-                      >
-                      <v-icon size="40"
-                          @click="social_click2">
-                          $vuetify.icons.kakaoIcon
-                      </v-icon>
-              
+                     <v-list-item-icon
                       
+                      >
+                      <v-icon 
+                          size="40"
+                          @click="social_click2"
+                          
+                          >
+                          $vuetify.icons.kakaoIcon
+                      </v-icon>          
                     </v-list-item-icon>  
 
-                  </v-row>
+  
+                     <v-list-item-avatar
+                     
+                    >
+                    
+                      <v-img
+                        src="../assets/logo.png"
+                        contain
+                        height="30px"
+                        width="30px"
+                        @click="naver_login_click"
+                      >
+                     </v-img>
+                    
+                    </v-list-item-avatar>
+
+
+
+
+
+                       <!-- <v-icon size="40"
+                          @click="social_click2">
+                          $vuetify.icons.kakaoIcon
+                      </v-icon>  
+                         <v-icon size="40"
+                          @click="social_click2">
+                          $vuetify.icons.kakaoIcon
+                      </v-icon>  
+                         <v-icon size="40"
+                          @click="social_click2">
+                          $vuetify.icons.kakaoIcon
+                      </v-icon>   -->
+
+                  
+            </v-row>
+                    
+
+                 
           </v-list-item-content>
 
       
@@ -227,7 +266,7 @@
     >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Apple</v-toolbar-title>
+      <v-toolbar-title>App</v-toolbar-title>
     </v-app-bar>
   </div>
 </template>
@@ -272,6 +311,20 @@ export default {
           }
         
 
+      },
+
+      // 네이버 로그인
+      naver_login_click(){
+          axios({
+                url: `http://localhost:4000/naverlogin`,
+                method: "get",
+                data: {},
+                headers: {
+                    'content-type': 'application/json',
+                }
+            }).then(res => {
+              console.log(res)
+            })
       },
 
       btnMovieReser() {
@@ -349,16 +402,12 @@ export default {
             if (!Kakao.Auth.getAccessToken()) {
                     console.log('Not logged in.');
                     return;
-                }
+            }
                     console.log('=================')
-                    Kakao.Auth.logout(function() {
+            Kakao.Auth.logout(function() {
                     console.log(Kakao.Auth.getAccessToken());
-
-                   
-
-                    
-                });
-            },
+            });
+          },
 
       
     
