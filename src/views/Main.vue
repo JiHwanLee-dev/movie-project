@@ -33,9 +33,23 @@
 </template>
 
 <script>
+import { mapState } from "vuex"
 export default {
+
+  data(){
+      return { 
+          subject : "",
+      }
+  },
+
+  computed: {
+    ...mapState(["isLogin"])
+  },
+
   created(){
     console.log('main_craeted()')
+    
+    console.log(this.isLogin);
   }
 }
 </script>

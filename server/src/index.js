@@ -258,6 +258,50 @@ app.get('/naverlogin', function (req, res) {
 
 
 
+// id중복체크
+app.post('/idValid', function (req, res) {
+    console.log('=========== idValid ===========');
+    console.log('id : ' , req.body.id)
+
+    var id = req.body.id;
+
+    try{
+
+        connection.query(`SELECT * FROM user WHERE id = '${id}'`, function (err, result, fields) {
+            if (err){
+                console.log('err : ', err)
+            }
+
+            console.log('result : ' + JSON.stringify(result));
+            
+            console.log('result-length : ', result.length);
+            // nodejs에서는 한번 끊어진 connetion은 다시 사용할 수 없음. 그래서 2번째 클릭시 부터
+            // [ annot enqueue Quit after invoking quit.] 오류가 뜸.
+            // connection.end();
+            
+            // 중복되는 id가 없음.
+            if(result.length === 0 ){
+                res.json({
+                    result: 'ok'
+                })
+            }else{
+                res.json({
+                    result: 'no'
+                })
+            }
+
+           
+        });
+
+     
+            
+     } catch (err) {
+        // ... error checks
+        console.log('err is ', err)
+     }
+
+});
+
 
 
 
@@ -302,22 +346,53 @@ app.post('/joinProcess', function(req, res){
 
 });
 
+// 로그인 
+app.post('/loginProcess', function (req, res) {
+    console.log('=========== loginProcess ===========');
+    console.log('res : ', req.body)
+
+    var id = req.body.id;
+    var passwd = req.body.passwd;
+
+    connection.query(`SELECT * FROM user WHERE id = '${id}' AND passwd = '${passwd}'`, function (err, result, fields) {
+        if (err){
+            console.log('err : ', err)
+        }
+        console.log('result : ' + JSON.stringify(result));
+        // connection.end();
+            
+        // 아이디나 비밀번호가 틀림..
+        if(result.length === 0 ){
+            res.json({
+                result: 'false'
+            })
+        }else{
+            res.json({
+                result: 'ok'
+            })
+        }
+    
+    });
+
+
+});
+
 
 // 유저 확인 (임시)
-app.post('/userCheck', function (req, res) {
+app.get('/userCheck', function (req, res) {
     console.log('=========== userCheck ===========');
-    console.log('res : ', req.body)
+    console.log('res : ', req.query)
 
     var id = req.body.id;
 
     connection.query(`SELECT * FROM user WHERE id = '${id}'`, function (err, res, fields) {
-    if (err){
-        console.log('err : ', err)
-    }
-    console.log('result : ' + JSON.stringify(res));
-    connection.end();
+        if (err){
+            console.log('err : ', err)
+        }
+        console.log('result : ' + JSON.stringify(res));
+        connection.end();
     
-});
+    });
 
 
 });

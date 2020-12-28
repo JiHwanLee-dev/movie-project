@@ -30,18 +30,26 @@
           <v-list-item-subtitle
             class="subtitle"
             >
-
             <v-btn
+              v-if="isLogin"
               rounded
               class="ma-2"
               outlined
               color="white"
               @click="btnLogin"
-            >
-              
+            > 
+                로그아웃
+            </v-btn>
+            <v-btn
+              v-else
+              rounded
+              class="ma-2"
+              outlined
+              color="white"
+              @click="btnLogin"
+            > 
                 로그인
             </v-btn>
-
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -106,10 +114,10 @@
         >
           <v-list-item-title 
              
-          
+
             class="titles"
             >
-
+            
             <v-row
               align="center"
               justify="center"
@@ -123,10 +131,7 @@
                     >
                       <v-icon>mdi-home</v-icon>
                     </v-btn>
-            </v-row>
-
-      
-            
+            </v-row>  
             
           </v-list-item-title>
            <v-list-item-subtitle
@@ -134,8 +139,7 @@
             >
               <v-row
                 justify="center"
-              >
-                
+              >   
                    극장별 예매
               </v-row>
                
@@ -155,6 +159,7 @@
           v-for="item in items"
           :key="item.title"
           link
+          router :to="{name : 'Reserve'}"
         >
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
@@ -266,13 +271,19 @@
     >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>App</v-toolbar-title>
+      <v-col class="d-flex justify-space-around">
+             <img class="mr-3" :src="require('../assets/cgv_logo.jpg')" height="40"/>
+  
+    </v-col>
+
+
     </v-app-bar>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
+import { mapState } from "vuex"
 import axios from 'axios';
 export default {
   data: () => ({ 
@@ -286,12 +297,14 @@ export default {
 
   }),
 
+  computed: {
+    ...mapState(["isLogin"])
+  },
+
   methods : {
      
       social_click2() {
           //alert((('click22')))
-
-
           if(!Kakao.Auth.getAccessToken()){
             //    Kakao.Auth.loginForm({
             //      success: function(authObj) {

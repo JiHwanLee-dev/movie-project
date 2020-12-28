@@ -59,6 +59,7 @@
             >
                 <v-btn
                      rounded
+                     @click="idValid"
                 >
                     중복확인
                 </v-btn>
@@ -235,7 +236,9 @@
                     가입하기
                 </v-btn>
 
+                <!-- 
                 <v-btn
+                    
                     @click="btnCheck"
                     class="primary"
                     block
@@ -243,7 +246,7 @@
                 >
                     유저확인
                 </v-btn>
-
+                -->
             </v-col>
         </v-row>
 
@@ -485,7 +488,18 @@ export default {
                 }
             
             }).then(res => {
-                console.log('loginResult : ', res);
+                console.log('JoinResult : ', res);
+
+                // 회원가입 성공
+                if(res.data.result == 'ok'){
+                    this.$router.push(
+                        {
+                            name : 'Login'
+                        }
+                    )
+                }
+
+                
             })
 
         },
@@ -499,7 +513,7 @@ export default {
             
             axios({
                 url: "http://localhost:3000/userCheck",
-                method: "post",
+                method: "get",
                 data: jsonData,
                 headers: {
                     'content-type': 'application/json',            
@@ -507,8 +521,45 @@ export default {
             
             }).then(res => {
                 console.log('loginResult : ', res);
+                
+                // 회원가입 성공
+                if(res.data.result == "ok"){
+                    this.$router.push(
+                        {
+                            name : 'Main'
+                        }
+                    )
+                }
+            }).catch(function (err) {
+                console.log('err: ', err);
             })
 
+        },
+
+         // 아이디 중복체크
+        idValid() {
+
+            const jsonData = JSON.stringify(this.user);
+
+            console.log(jsonData);
+            
+            axios({
+                url: "http://localhost:3000/idValid",
+                method: "post",
+                data: jsonData,
+                headers: {
+                    'content-type': 'application/json',            
+                }
+            
+            }).then(res => {
+                console.log('idValidResult : ', res);
+
+                if(res.data.result === 'ok'){
+                    alert('사용가능한 아이디 입니다.');
+                }else{
+                    alert('이미 사용중인 아이디 입니다. ');
+                }
+            })
         }
 
 
