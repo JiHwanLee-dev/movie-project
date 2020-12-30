@@ -128,6 +128,7 @@
                       large
                       fab
                       color="black"
+                      @click="btnTheaterSelect"
                     >
                       <v-icon>mdi-home</v-icon>
                     </v-btn>
@@ -357,6 +358,13 @@ export default {
         console.log('Login_Click')
         this.$router.push({
           name : 'Login'
+        })
+      },
+
+      btnTheaterSelect() {
+        //alert('극장별 선택');
+        this.$router.push({
+          name : 'Theater_Select'
         })
       },
 

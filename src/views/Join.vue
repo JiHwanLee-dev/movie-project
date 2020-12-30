@@ -236,7 +236,7 @@
                     가입하기
                 </v-btn>
 
-                <!-- 
+               
                 <v-btn
                     
                     @click="btnCheck"
@@ -246,7 +246,7 @@
                 >
                     유저확인
                 </v-btn>
-                -->
+              
             </v-col>
         </v-row>
 
@@ -524,11 +524,11 @@ export default {
                 
                 // 회원가입 성공
                 if(res.data.result == "ok"){
-                    this.$router.push(
-                        {
-                            name : 'Main'
-                        }
-                    )
+                    // this.$router.push(
+                    //     {
+                    //         name : 'Main'
+                    //     }
+                    // )
                 }
             }).catch(function (err) {
                 console.log('err: ', err);

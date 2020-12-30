@@ -132,15 +132,22 @@ export default {
       console.log()
     },
 
+    computed: {
+      
+    },
+
     methods: {
   
       // 좌석 클릭
       btnSeat(value, row, col){
         
+        var num;
+
         if(value != 't0'){
           if(value == 't2'){
             alert('선택한 좌석은 예약이 완료된 좌석입니다.  다른 좌석을 선택해주세요.')
-          }else if(value == 't3'){
+
+          }else if(value == 't3'){                     // 예약한 좌석을 다시 클릭 햇을 시, 예약가능 표시로 바꿔줌.
             this.isClicked = !this.isClicked;          // ?????????????????????? 
             this.seat[row][col] = 't1'
           }else{
@@ -148,11 +155,13 @@ export default {
             this.isClicked = !this.isClicked;
           
             if(row == 0){
-            this.seatNum = 'A';
-          }else if(row == 1){
-            this.seatNum = 'B';
-          }
+              num = 'A';
+            }else if(row == 1){
+              num = 'B';
+            }
           //alert('value : ' + value + ' / ' + '(' + this.seatNum + (col+1) + '좌석'+')');
+          this.seatNum = num + (col + 1);
+          console.log('좌석 : ' + this.seatNum);
           this.seat[row][col] = 't3'
           
           //window.location.reload();
@@ -161,6 +170,7 @@ export default {
         }
         
       }
+      
     }
 }
 </script>

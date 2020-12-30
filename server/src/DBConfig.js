@@ -5,6 +5,7 @@ const config = {
     user:"ubuntu",
     password:"Zocm6GlxWQPS",
     database:"movie_work",
+    multipleStatements: true
 }
 
 

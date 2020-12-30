@@ -137,7 +137,8 @@ var connection = sql.createConnection({
     host     : '13.209.70.57',
     user     : 'root',
     password : 'Zocm6GlxWQPS',
-    database : 'movie_work'
+    database : 'movie_work',
+    multipleStatements: true
   });
 
 
@@ -209,7 +210,7 @@ app.post('/emailAuth', (req, res) => {
           console.log(error);
         } else {
           console.log('Email sent: ' + info.response);
-
+                
           tempAuthNum = authNum;
 
           console.log('tempAuthNum : ', tempAuthNum)
@@ -377,6 +378,38 @@ app.post('/loginProcess', function (req, res) {
 
 });
 
+// 전국 극장정보를 불러옴
+app.get('/selectTheater', function(req, res){
+    console.log('=========== selectTheater ===========');
+    console.log('req : ', req.body)
+
+    connection.query(`SELECT  city, theater_cnt FROM nationwide_city; SELECT nmt_cd, city,theater FROM nationwide_movie_theater;`, [1,2], function (err, result, fields) {
+        if (err){
+            console.log('err : ', err)
+        }
+        console.log('result : ' + JSON.stringify(result[0]));
+        console.log('result2 : ' + JSON.stringify(result[1]));
+        
+        if(result.length === 0 ){
+            res.json({
+                result: 'false'
+            })
+        }else{
+            res.json({
+                result: 'ok',
+                data: result[0],
+                data2: result[1]
+            })
+        }
+        //connection.end();
+    
+    });
+
+
+
+
+})
+
 
 // 유저 확인 (임시)
 app.get('/userCheck', function (req, res) {
@@ -385,7 +418,7 @@ app.get('/userCheck', function (req, res) {
 
     var id = req.body.id;
 
-    connection.query(`SELECT * FROM user WHERE id = '${id}'`, function (err, res, fields) {
+    connection.query(`SELECT * FROM user`, function (err, res, fields) {
         if (err){
             console.log('err : ', err)
         }
@@ -405,7 +438,7 @@ app.get('/userCheck', function (req, res) {
 
 // localhost:3000 포트 사용
 // 배포시 실서버 주소로 ?
-app.listen(port, () => {
+app.listen(port,'192.168.103.24', () => {
     console.log(`http://localhost:${port}`)
  })
 

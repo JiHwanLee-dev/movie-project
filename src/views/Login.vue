@@ -15,12 +15,7 @@
                 $vuetify.icons.arrow_Back
             </v-icon>
         </v-btn>
-
-        
-
-
           <v-spacer/>
-          
             <v-toolbar-title > 
                 로그인
             </v-toolbar-title>
@@ -30,15 +25,12 @@
 
     <v-main>
         <v-container
-        fluid
-        
+        fluid 
         >
           
-
         <v-row
             align="center"
-            justify="center"
-            
+            justify="center"       
         >
             <v-col
                 cols="12"
@@ -72,11 +64,7 @@
                     color="primary"
                 >
                     로그인
-                </v-btn>
-
-                
-
-                
+                </v-btn>          
             </v-col>
         </v-row>
 
@@ -85,9 +73,7 @@
             justify="center"
         >
 
-            <v-btn
-                text
-            >
+            <v-btn text>
                 ID/PW 찾기
             </v-btn>
 
@@ -102,13 +88,9 @@
 
             |
 
-             <v-btn
-                text
-            >
+             <v-btn text>
                  비회원 예매확인
-            </v-btn>
-
-           
+            </v-btn>    
         </v-row>
 
        
