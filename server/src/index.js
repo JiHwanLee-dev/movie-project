@@ -383,7 +383,7 @@ app.get('/selectTheater', function(req, res){
     console.log('=========== selectTheater ===========');
     console.log('req : ', req.body)
 
-    connection.query(`SELECT  city, theater_cnt FROM nationwide_city; SELECT nmt_cd, city,theater FROM nationwide_movie_theater;`, [1,2], function (err, result, fields) {
+    connection.query(`SELECT  city, theater_cnt FROM city; SELECT theater_cd, city,theater FROM theater;`, [1,2], function (err, result, fields) {
         if (err){
             console.log('err : ', err)
         }

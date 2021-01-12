@@ -91,22 +91,6 @@ export default {
       console.log(this.seat[1][1])
       console.log(this.seat)
 
-      
-      function Arr2(rows, columns){
-        var arr = new Array(rows)
-        for(var i = 0; i < rows; i++){
-          arr[i] = new Array(columns);
-        }
-
-        console.log('arr : '+arr)
-
-        return arr;
-      }
-
-
-      var seatArr = Arr2(this.column,this.rows);
-      console.log('seatArr1 : ' + seatArr)
-
     
 
 
@@ -114,7 +98,23 @@ export default {
       for(var i = 0; i < this.column; i++){
             //console.log('aa')
           for(var j = 0; j < this.rows; j++){
-            //console.log('bb')
+            
+           
+            if(i == 0){           // A열 좌석
+              //this.$set(this.seat[i], j, 'A'+(j+1))
+              this.seat[i][j] = 'A'+(j+1)
+            }else if(i == 1){       // B열 좌석
+              console.log()
+            }
+
+
+            // if(this.seat[i][j] == 't0'){
+
+            // }else{
+
+            // }
+            console.log('좌석 : ', this.seat[i][j] + ' ')
+            console.log()
         
 
               //testArr[i][j] = this.
@@ -136,6 +136,13 @@ export default {
       
     },
 
+    watch:  {
+      seat: function(){
+        //alert('sdadas')
+      }
+    },
+
+
     methods: {
   
       // 좌석 클릭
@@ -148,11 +155,13 @@ export default {
             alert('선택한 좌석은 예약이 완료된 좌석입니다.  다른 좌석을 선택해주세요.')
 
           }else if(value == 't3'){                     // 예약한 좌석을 다시 클릭 햇을 시, 예약가능 표시로 바꿔줌.
-            this.isClicked = !this.isClicked;          // ?????????????????????? 
-            this.seat[row][col] = 't1'
+            //this.isClicked = !this.isClicked;          // ?????????????????????? 
+            //this.seat[row][col] = 't1'
+            this.$set(this.seat[row], col, 't1'); 
+            //this.seat[row][col].replace(row,col,'t1');
           }else{
             console.log('isClicked : ' + this.isClicked)
-            this.isClicked = !this.isClicked;
+            //this.isClicked = !this.isClicked;
           
             if(row == 0){
               num = 'A';
@@ -162,8 +171,12 @@ export default {
           //alert('value : ' + value + ' / ' + '(' + this.seatNum + (col+1) + '좌석'+')');
           this.seatNum = num + (col + 1);
           console.log('좌석 : ' + this.seatNum);
-          this.seat[row][col] = 't3'
           
+          console.log('aa : ', this.seat[1])
+
+          //this.seat[row][col] = 't3'            // 이런식으로 값을 바꿔버리면, vue에서 바뀐값을 인식하지 못함.
+          this.$set(this.seat[row], col, 't3');   // vue set함수로 특정 배열의 값 수정
+
           //window.location.reload();
           console.log(this.seat);
           }

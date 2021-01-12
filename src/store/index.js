@@ -12,6 +12,15 @@ export default new Vuex.Store({
     seat : [
       
     ],
+    
+    reservation_info: {
+      movie_cd: null,
+      theater_cd: null,
+      city_cd: null,
+      seatDisplay_cd: null,
+      sangyounggwan_cd: null
+    },
+
     userInfo: null,
     isLogin: false,
     isLoginError: false,
