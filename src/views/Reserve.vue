@@ -4,17 +4,16 @@
     {{ seat }}
     <h1 class="seatDiv" v-html="seat"></h1>
     <div style="border: 1px solid red;">
-      <table>
-        <tr>
-          <td><div class="test1"></div></td>
-          <td><div class="test1"></div></td>
-        </tr>
-        <tr>
-          <td>dassaasd</td>
-          <td>1155485</td>
-        </tr>
-        
-      </table>
+        <table>
+            <tr>
+                <td><div class="test1"></div></td>
+                <td><div class="test1"></div></td>
+            </tr>
+            <tr>
+                <td>dassaasd</td>
+                <td>1155485</td>
+            </tr>
+        </table>
     </div>
     <br><br>
     <div class="seatDivs">
@@ -24,7 +23,27 @@
         <div v-for="(col, idx_col) in row" :key="col.j" style="display: inline; text-align: center; "> 
            
             <div style="display: inline-block" :class="col" :style="isClicked"  @click="btnSeat(col, idx_row, idx_col)" >
-                {{ col }}
+              
+
+             
+                <div v-if="seat[idx_row][idx_col] !== 't0'">
+                    <div v-if="idx_row == 0" style=" text-align: center; vertical-align: middle;" >
+                        <span style="">
+                            A{{ idx_col + 1}}
+                        </span>
+                    </div>
+                    <div v-else-if="idx_row == 1">
+                        <span>
+                            B{{ idx_col + 1}}
+                        </span>
+                    </div> 
+                </div>
+              <div v-else="" @change="ppp">
+                 
+              </div>
+           
+
+
             </div>
             
         </div>      
@@ -32,10 +51,18 @@
 
      <div class="t1"></div> 예매가능
      <div class="t2"></div> 예매불가
-    </div>
-    
 
-   <div class="test2"></div>
+
+  
+    </div>
+ 
+
+    
+   <div class="test2">
+       <span class="test2-span"> asdada a</span>
+   </div>
+
+
 
 
   </div>
@@ -93,7 +120,7 @@ export default {
 
     
 
-
+      //this.asd = 'aaa';
 
       for(var i = 0; i < this.column; i++){
             //console.log('aa')
@@ -102,17 +129,14 @@ export default {
            
             if(i == 0){           // A열 좌석
               //this.$set(this.seat[i], j, 'A'+(j+1))
-              this.seat[i][j] = 'A'+(j+1)
+
+              //this.asd = 'A'+(j+1);
+
+              //this.seat[i][j] = 'A'+(j+1)
             }else if(i == 1){       // B열 좌석
+               //this.asd = 'A'+(j+11);
               console.log()
             }
-
-
-            // if(this.seat[i][j] == 't0'){
-
-            // }else{
-
-            // }
             console.log('좌석 : ', this.seat[i][j] + ' ')
             console.log()
         
@@ -144,7 +168,11 @@ export default {
 
 
     methods: {
-  
+      
+      ppp() {
+        console.log('ppp : ', this.seat)
+      },
+
       // 좌석 클릭
       btnSeat(value, row, col){
         
@@ -205,9 +233,16 @@ export default {
   }
 
   .test2{
-    background: blue;
-    width: 30px;
-    height: 30px;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid red;
+    width: 80px;
+    height: 80px;
+  }
+
+  .test2-span{
+    border: 1px solid blue; 
   }
 
   .seatDivs{
@@ -217,8 +252,9 @@ export default {
   }
 
   .t0{
-    width: 20px;
-    height: 20px;
+ 
+    width: 30px;
+    height: 30px;
     background: white;
      margin-right: 2px;
      vertical-align: middle;
@@ -226,10 +262,11 @@ export default {
   }
 
   .t1{
+
     text-align: center; 
     display: inline-block;
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     background: gray;
     margin-right: 2px;
     cursor: pointer;
@@ -238,10 +275,11 @@ export default {
   }
 
   .t2{
+
     text-align: center; 
     display: inline-block;
-     width: 20px;
-    height: 20px;
+     width: 30px;
+    height: 30px;
     background: red;
      margin-right: 2px;
      cursor: pointer;
@@ -249,8 +287,9 @@ export default {
   }
 
   .t3{
-     width: 20px;
-    height: 20px;
+
+     width: 30px;
+    height: 30px;
     background: blue;
      margin-right: 2px;
      cursor: pointer;
